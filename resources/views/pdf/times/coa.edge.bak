@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @font-face {
+      font-family: 'Facit';
+      font-style: normal;
+      font-weight: 400;
+      src: url('https://twsek.myra.twiceware.cloud/fonts/facit-regular-webfont.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'Facit';
+      font-weight: 600;
+      src: url('https://twsek.myra.twiceware.cloud/fonts/facit-semibold-webfont.ttf') format('truetype');
+    }
+
+    @page {
+      margin: 2cm 2cm 2cm 2cm;
+      size: A4;
+      font-family: 'Facit';
+      font-size: 10pt;
+
+      @bottom-center {
+        content: "twiceware solutions e. K."
+      }
+
+      @top-center {
+        content:  string(title);
+      }
+
+      @bottom-left {
+        content: element(pageHeader);
+      }
+
+      @bottom-right{
+        content: counter(page) "/" counter(pages);
+      }
+    }
+
+    @media print {
+    #divHeader{
+        position: running(pageHeader);
+    }
+}
+
+    header {
+      font-family: 'Facit';
+      font-size: 10pt;
+    }
+
+    body {
+      font-family: 'Facit';
+      font-size: 10pt;
+    }
+
+    p {
+      margin: 0;
+      padding:0;
+    }
+
+
+    p {
+      text-align: justify;
+      line-height: 1.5;
+
+      hyphens: auto;
+    }
+
+    table p {
+      margin-left: -1.6em;
+    }
+
+
+    table {
+      vertical-align: bottom;
+      font-size: 9pt;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border-collapse: collapse;
+      margin-bottom: 5mm;
+    }
+
+    h2 {
+      font-size: 14pt;
+      line-height: 1;
+      margin:0;
+      padding:0;
+      padding-bottom: 1mm;
+
+    }
+
+    h4 {
+      font-size: 11pt;
+
+      font-weight: 600;
+
+      margin-bottom: 4mm;
+
+    }
+
+
+    h3 {
+      font-size: 11pt;
+      margin:0;
+      padding: 0;
+      padding-bottom: 3mm;
+      // string-set: title content();
+    }
+
+    h1 {
+      font-size: 16pt;
+      font-weight: bold;
+      color: #444;
+      padding: 0;
+      margin: 0;
+      line-height: 1;
+    }
+
+    table tr th {
+      border-top: 1px solid #aaa;
+      border-bottom: 1px solid #aaa;
+      border-collapse: collapse;
+      vertical-align: bottom;
+
+    }
+
+    table tr th, table tr td {
+      font-weight: 400;
+      padding: 2px;
+    }
+
+    table tr th:first-child, table tr td:first-child {
+    }
+
+    table tr th.time {
+      width: 20mm;
+    }
+
+    table tr th.date {
+      width: 18mm;
+    }
+
+    table tr th.duration, table tr td.duration {
+      width: 18mm;
+      text-align: right
+    }
+
+
+
+    table tr th.sep {
+      width: 4mm;
+      text-align: center;
+    }
+
+    table tr td {
+      vertical-align: top;
+      font-weight: 400;
+    }
+
+    table tr th.right, table tr td.right {
+      text-align: right
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin:0;
+    }
+
+    table tr.day th {
+      border-top: none;
+    }
+
+    table tr.day, tr.day th {
+      font-weight: bold;
+    }
+
+ul > li:before {
+    content: "–"; /* en dash here */
+    position: absolute;
+    margin-left: -1.1em;
+}
+
+table tr.note {
+  font-weight: 400;
+}
+
+
+    div.note {
+      line-height: 1.5;
+      font-size: 9pt;
+
+
+      margin-left: 20px;
+      margin-right: 20px;
+
+      page-break-inside: avoid;
+    }
+
+    tr.strong th {
+      background-color: #eee;
+    }
+
+    table tr.border td {
+      border-top: 1px solid #aaa;
+    }
+  </style>
+</head>
+<div>
+
+    <header id="divHeader">
+      {{ now('dd.MM.yyyy HH:mm') }}
+    </header>
+
+    <h2>Leistungsnachweis</h2>
+    <p>
+    fullmarketing.at GmbH<br/>
+    {{ startOfWeek }} - {{ endOfWeek }}
+    </p>
+
+    <table style="margin: 4mm 0; font-size: 10pt;">
+        @each(row in openTimesRows)
+        <tr>
+          <td>
+            {{ row.project.name}}
+          </td>
+          <td class="right duration">
+            {{ duration(row.mins)}}
+          </td>
+          <td></td>
+        </tr>
+        @endeach
+        <tr class="border">
+          <td><b>Summe</b></td>
+          <td class="right duration">
+            <b>{{ duration(sums.minutes)}}</b>
+          </td>
+          <td class="right duration">
+            <b>({{ float(sums.hours)}} h)</b>
+          </td>
+        </tr>
+    </table>
+    <br><br>
+
+    @each((days, project) in groupedTimes)
+      <h3 style="padding-bottom: 0;margin-bottom: 0;">{{ project }}</h3>
+
+      <table border-spacing="0" cellspacing="0">
+    @each((day, ts) in days)
+
+    <tbody style="page-break-inside: avoid;">
+        <tr class="day note">
+          <th colspan="2">
+            <br/>
+            {{ lux(ts, 'ccc, dd. MMM yyyy') }}
+          </th>
+          <th class="duration right">
+            <br/>
+            {{ duration(day.sum)}}
+          </th>
+        </tr>
+
+
+
+      @each(time in day.times)
+
+          <tr class="note strong">
+            <th class="time">{{ lux(time.begin_at, 'HH:mm') }} - {{ lux(time.end_at, 'HH:mm') }} </th>
+            <th style="padding-left: 10px;">
+              {{ time.category?.name }}
+            </th>
+            <th class="duration right">{{ duration(time.mins) }}</th>
+          </tr>
+          <tr class="note">
+
+            <th  colspan="2" style="padding-left: 10px;padding-top:4px;font-size: 9pt;">
+              <div class="note">
+                {{{ md(time.note) }}}
+              </div>
+            </th>
+            <th></th>
+          </tr>
+        </tbody>
+              @endeach
+
+        @endeach
+      </table>
+
+      <br/>
+
+    @endeach
+  </div>
+</body>
+
+</html>
+

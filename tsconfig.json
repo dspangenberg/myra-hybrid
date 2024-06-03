@@ -1,0 +1,48 @@
+{
+  "extends": "./node_modules/adonis-preset-ts/tsconfig",
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ],
+  "module": "ES2020",
+  "compilerOptions": {
+    "outDir": "build",
+    "rootDir": "./",
+    "jsx": "preserve",
+    "sourceMap": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "paths": {
+      "App/*": [
+        "./app/*"
+      ],
+      "Config/*": [
+        "./config/*"
+      ],
+      "Contracts/*": [
+        "./contracts/*"
+      ],
+      "Database/*": [
+        "./database/*"
+      ]
+    },
+    "types": [
+      "@adonisjs/core",
+      "@adonisjs/repl",
+      "@adonisjs/session",
+      "@adonisjs/view",
+      "@adonisjs/shield",
+      "@eidellev/inertia-adonisjs",
+      "@adonisjs/lucid",
+      "@adonisjs/auth",
+      "@adonisjs/lucid-slugify",
+      "adonis-lucid-soft-deletes",
+      "adonis-responsive-attachment",
+      "@adonisjs/attachment-lite",
+      "@adonisjs/redis"
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "extends": ["plugin:vue/vue3-recommended", "standard"],
+  "plugins": ["vue"],
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "vue/setup-compiler-macros": true
+  },
+  "rules": {
+    "no-console": "off",
+    "no-unused-vars": "warn",
+    "vue/no-multiple-template-root": "off",
+    "vue/no-unused-components": "warn",
+    "vue/script-setup-uses-vars": "error",
+    "vue/multi-word-component-names": "off"
+  },
+  "overrides": [{
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    // for files matching this pattern
+    "files": ["*.ts"],
+    // following config will override "normal" config
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "sourceType": "module"
+    },
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+      "space-before-function-paren": "off",
+      "comma-dangle": ["error", "never"]
+    },
+    "extends": [
+      "plugin:adonis/typescriptApp"
+    ]
+  }]
+}
